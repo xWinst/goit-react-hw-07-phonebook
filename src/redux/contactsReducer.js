@@ -1,22 +1,59 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { addContact, deleteContact, filterContacts } from './contactsActions';
-import initialContacts from '../contacts.json';
+import { getContacts, addContact, deleteContact } from './operations';
+import { filterContacts } from './contactsActions';
 
 const initalState = {
-    items: initialContacts,
+    items: [],
     filter: '',
+    isLoding: false,
+    error: null,
 };
 
 const contacts = createReducer(initalState, {
-    [addContact]: (state, action) => {
-        state.items.unshift(action.payload);
-        console.log('state: ', state);
+    [getContacts.pending]: state => {
+        state.isLoding = true;
     },
-    [deleteContact]: (state, action) => {
+
+    [getContacts.fulfilled]: (state, action) => {
+        state.items = action.payload;
+        state.isLoding = false;
+    },
+
+    [getContacts.rejected]: (state, action) => {
+        state.error = action.payload;
+        state.isLoding = false;
+    },
+
+    [addContact.pending]: state => {
+        state.isLoding = true;
+    },
+
+    [addContact.fulfilled]: (state, action) => {
+        state.items.unshift(action.payload);
+        state.isLoading = false;
+    },
+
+    [addContact.rejected]: (state, action) => {
+        state.error = action.payload;
+        state.isLoading = false;
+    },
+
+    [deleteContact.pending]: state => {
+        state.isLoding = true;
+    },
+
+    [deleteContact.fulfilled]: (state, action) => {
         state.items = state.items.filter(
             contact => contact.id !== action.payload
         );
+        state.isLoading = false;
     },
+
+    [deleteContact.rejected]: (state, action) => {
+        state.error = action.payload;
+        state.isLoading = false;
+    },
+
     [filterContacts]: (state, action) => {
         state.filter = action.payload;
     },

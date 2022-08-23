@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux/es/exports';
 import { Report } from 'notiflix/build/notiflix-report-aio';
 import { FaUser, FaPhoneAlt } from 'react-icons/fa';
-import { addContact } from 'redux/contactsActions';
+import { addContact } from 'redux/operations';
 import s from './ContactForm.module.css';
 
 const ContactForm = () => {
-    const [contact, setContact] = useState({ name: '', number: '' });
+    const [contact, setContact] = useState({ name: '', phone: '' });
     const contacts = useSelector(state => state.items);
     const dispatch = useDispatch();
 
@@ -28,7 +28,7 @@ const ContactForm = () => {
         } else {
             dispatch(addContact(contact));
         }
-        setContact({ name: '', number: '' });
+        setContact({ name: '', phone: '' });
     };
 
     const saveData = event => {
@@ -57,9 +57,9 @@ const ContactForm = () => {
                 <input
                     className={s.input}
                     type="tel"
-                    value={contact.number}
+                    value={contact.phone}
                     onChange={saveData}
-                    name="number"
+                    name="phone"
                     pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
                     title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                     required
